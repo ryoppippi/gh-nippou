@@ -6,6 +6,7 @@ require github.com/cli/go-gh/v2 v2.12.0
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
+	github.com/cli/go-gh v1.2.1 // indirect
 	github.com/cli/safeexec v1.0.0 // indirect
 	github.com/cli/shurcooL-graphql v0.0.4 // indirect
 	github.com/google/go-github/v69 v69.2.0 // indirect
