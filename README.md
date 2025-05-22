@@ -1,8 +1,8 @@
 # gh-nippou
 
-This is a CLI extension for GitHub CLI (`gh`). This extension helps you generate daily reports (日報 - nippou) based on your GitHub activities.
+This is a CLI extension for the GitHub CLI (`gh`) that helps you generate daily reports (日報 - nippou) based on your GitHub activities.
 
-Based on [masutaka/github-nippou](https://github.com/masutaka/github-nippou/).
+Based on [masutaka/github-nippou](https://github.com/masutaka/github-nippou).
 
 ## Installation
 
@@ -23,7 +23,7 @@ gh nippou
 You can also specify a date or a range:
 
 ```sh
-gh nippou 
+gh nippou
 gh nippou --since YYYYMMDD --until YYYYMMDD
 ```
 
@@ -40,11 +40,12 @@ gh nippou --help
 
 ## Motivation
 
-[masutaka/github-nippou](https://github.com/masutaka/github-nippou) is really nice tool, but I have some issues with it.
+[masutaka/github-nippou](https://github.com/masutaka/github-nippou) is a really nice tool, but I have some issues with it.
 
-- We need to add config in `.git/config` file, which makes it hard to manage with public dotfiles.
-- I don't want to install the command on Homebrew or other package manager. This tool is only for GitHub, so why don't we use `gh` command?
+- We need to add a config in the `.git/config` file, which makes it hard to manage with public dotfiles.
+- I don't want to install the command via Homebrew or another package manager. This tool is only for GitHub, so why not use the `gh` command?
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+
