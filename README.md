@@ -11,7 +11,6 @@ Based on [masutaka/github-nippou](https://github.com/masutaka/github-nippou/).
     ```sh
     gh extension install ryoppippi/gh-nippou
     ```
-    (Assuming your repository is `ryoppippi/gh-nippou`. Please update if it's different.)
 
 ## Usage
 
