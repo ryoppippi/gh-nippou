@@ -3,9 +3,9 @@ module github.com/ryoppippi/gh-nippou
 go 1.24.3
 
 require (
+	github.com/cli/go-gh v1.2.1
 	github.com/cli/go-gh/v2 v2.12.1
-	github.com/cli/go-gh/v2 v2.12.1
-	github.com/masutaka/github-nippou/v4 v4.2.35
+	github.com/masutaka/github-nippou/v4 v4.2.36
 	github.com/spf13/cobra v1.9.1
 )
 
@@ -26,7 +26,7 @@ require (
 	github.com/skratchdot/open-golang v0.0.0-20190402232053-79abb63cd66e // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/thlib/go-timezone-local v0.0.0-20210907160436-ef149e42d28e // indirect
-	golang.org/x/oauth2 v0.29.0 // indirect
+	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
 	golang.org/x/term v0.30.0 // indirect
 	golang.org/x/text v0.23.0 // indirect
