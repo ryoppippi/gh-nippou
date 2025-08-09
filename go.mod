@@ -1,6 +1,6 @@
 module github.com/ryoppippi/gh-nippou
 
-go 1.24.5
+go 1.24.6
 
 require (
 	github.com/cli/go-gh v1.2.1
