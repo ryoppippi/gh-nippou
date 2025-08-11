@@ -4,7 +4,7 @@ go 1.24.6
 
 require (
 	github.com/cli/go-gh v1.2.1
-	github.com/cli/go-gh/v2 v2.12.1
+	github.com/cli/go-gh/v2 v2.12.2
 	github.com/masutaka/github-nippou/v4 v4.2.36
 	github.com/spf13/cobra v1.9.1
 )
