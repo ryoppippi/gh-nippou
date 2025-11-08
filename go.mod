@@ -5,7 +5,7 @@ go 1.25.4
 require (
 	github.com/cli/go-gh v1.2.1
 	github.com/cli/go-gh/v2 v2.13.0
-	github.com/masutaka/github-nippou/v4 v4.2.39
+	github.com/masutaka/github-nippou/v4 v4.2.40
 	github.com/spf13/cobra v1.10.1
 )
 

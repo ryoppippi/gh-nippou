@@ -38,6 +38,8 @@ github.com/masutaka/github-nippou/v4 v4.2.36 h1:pgUTBgmy0z2L4o5a+F+EIKj0NVmBe1i4
 github.com/masutaka/github-nippou/v4 v4.2.36/go.mod h1:WC/OgxrNIpYRdLSNeWbC4yFXxv3aEYLFW+9KlmhejZI=
 github.com/masutaka/github-nippou/v4 v4.2.39 h1:mhNeYurf1oYIO+zbqUNow4ZjoejY8WeUgQRXgSdJmtE=
 github.com/masutaka/github-nippou/v4 v4.2.39/go.mod h1:lP/cpv/MAcbXg1397dOTHQUyNRW92RMY/UXurrtQifY=
+github.com/masutaka/github-nippou/v4 v4.2.40 h1:8fWGHobiekToir+tccaeDTW94B4vrLwR55x8YthMhNc=
+github.com/masutaka/github-nippou/v4 v4.2.40/go.mod h1:lP/cpv/MAcbXg1397dOTHQUyNRW92RMY/UXurrtQifY=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/muesli/termenv v0.16.0 h1:S5AlUN9dENB57rsbnkPyfdGuWIlkmzJjbFf0Tf5FWUc=
