@@ -40,6 +40,8 @@ github.com/masutaka/github-nippou/v4 v4.2.39 h1:mhNeYurf1oYIO+zbqUNow4ZjoejY8WeU
 github.com/masutaka/github-nippou/v4 v4.2.39/go.mod h1:lP/cpv/MAcbXg1397dOTHQUyNRW92RMY/UXurrtQifY=
 github.com/masutaka/github-nippou/v4 v4.2.40 h1:8fWGHobiekToir+tccaeDTW94B4vrLwR55x8YthMhNc=
 github.com/masutaka/github-nippou/v4 v4.2.40/go.mod h1:lP/cpv/MAcbXg1397dOTHQUyNRW92RMY/UXurrtQifY=
+github.com/masutaka/github-nippou/v4 v4.2.41 h1:rpvo5o0KJAi16p7Ceim+QSjCAh0MQNxrrs/2GdrX9Dw=
+github.com/masutaka/github-nippou/v4 v4.2.41/go.mod h1:VSZ8NR+xXoX6WAd5JfRfpkbMfRpW5FHuiJVdO0GBpFs=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/muesli/termenv v0.16.0 h1:S5AlUN9dENB57rsbnkPyfdGuWIlkmzJjbFf0Tf5FWUc=
@@ -74,6 +76,8 @@ golang.org/x/oauth2 v0.30.0 h1:dnDm7JmhM45NNpd8FDDeLhK6FwqbOf4MLCM9zb1BOHI=
 golang.org/x/oauth2 v0.30.0/go.mod h1:B++QgG3ZKulg6sRPGD/mqlHQs5rB3Ml9erfeDY7xKlU=
 golang.org/x/oauth2 v0.31.0 h1:8Fq0yVZLh4j4YA47vHKFTa9Ew5XIrCP8LC6UeNZnLxo=
 golang.org/x/oauth2 v0.31.0/go.mod h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA=
+golang.org/x/oauth2 v0.32.0 h1:jsCblLleRMDrxMN29H3z/k1KliIvpLgCkE6R8FXXNgY=
+golang.org/x/oauth2 v0.32.0/go.mod h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA=
 golang.org/x/sys v0.0.0-20210831042530-f4d43177bf5e/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.31.0 h1:ioabZlmFYtWhL+TRYpcnNlLwhyxaM9kWTDEmfnprqik=
