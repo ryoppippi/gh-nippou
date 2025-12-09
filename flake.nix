@@ -108,6 +108,7 @@
             gopls
             gotools
             go-tools
+            just
           ];
           inherit (pre-commit-check) shellHook;
         };
