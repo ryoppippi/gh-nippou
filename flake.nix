@@ -28,11 +28,7 @@
           { buildGoModule }:
           buildGoModule {
             pname = "gh-nippou";
-            version =
-              if self ? shortRev then
-                self.shortRev
-              else
-                "dev";
+            version = if self ? shortRev then self.shortRev else "dev";
 
             src = self;
 
@@ -43,12 +39,7 @@
             ldflags = [
               "-s"
               "-w"
-              "-X main.version=${
-                if self ? shortRev then
-                  self.shortRev
-                else
-                  "dev"
-              }"
+              "-X main.version=${if self ? shortRev then self.shortRev else "dev"}"
             ];
 
             meta = with final.lib; {
@@ -66,11 +57,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         # Extract version from git tag or use commit hash
-        version =
-          if self ? shortRev then
-            self.shortRev
-          else
-            "dev";
+        version = if self ? shortRev then self.shortRev else "dev";
 
         treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
