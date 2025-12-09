@@ -1,3 +1,5 @@
 /gh-nippou
 /gh-nippou.exe
 result
+.pre-commit-config.yaml
+!.envrc
