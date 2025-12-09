@@ -8,6 +8,8 @@ on:
       - '**.go'
       - 'go.mod'
       - 'go.sum'
+      - 'flake.nix'
+      - 'flake.lock'
       - '.github/workflows/ci.yaml'
   pull_request:
 
@@ -21,13 +23,13 @@ jobs:
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: Setup Go
-        uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # v6.1.0
+      - name: Install Nix
+        uses: cachix/install-nix-action@0b0e072294b088b73964f1d72dfdac0951439dbd # v31.8.4
         with:
-          go-version-file: go.mod
+          github_access_token: ${{ github.token }}
 
       - name: Build
-        run: go build -v ./...
+        run: nix build
 
       - name: Test
-        run: go test -v ./...
+        run: nix develop --command go test -v ./...
