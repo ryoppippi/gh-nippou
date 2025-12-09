@@ -6,6 +6,10 @@ build:
 test:
     go test -v ./...
 
+# Format code
+fmt:
+    go fmt ./...
+
 # Build and test
 all: build test
 
