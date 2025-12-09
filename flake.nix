@@ -4,6 +4,14 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -11,6 +19,8 @@
       self,
       nixpkgs,
       flake-utils,
+      treefmt-nix,
+      git-hooks,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -22,8 +32,26 @@
             self.shortRev
           else
             "dev";
+
+        treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+
+        pre-commit-check = git-hooks.lib.${system}.run {
+          src = ./.;
+          hooks = {
+            treefmt = {
+              enable = true;
+              package = treefmtEval.config.build.wrapper;
+            };
+          };
+        };
       in
       {
+        formatter = treefmtEval.config.build.wrapper;
+
+        checks = {
+          formatting = treefmtEval.config.build.check self;
+          inherit pre-commit-check;
+        };
         packages.default = pkgs.buildGoModule {
           pname = "gh-nippou";
           inherit version;
@@ -55,6 +83,7 @@
             gotools
             go-tools
           ];
+          inherit (pre-commit-check) shellHook;
         };
       }
     );
