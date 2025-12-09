@@ -22,7 +22,46 @@
       treefmt-nix,
       git-hooks,
     }:
-    flake-utils.lib.eachDefaultSystem (
+    {
+      overlays.default = final: prev: {
+        gh-nippou = final.callPackage (
+          { buildGoModule }:
+          buildGoModule {
+            pname = "gh-nippou";
+            version =
+              if self ? shortRev then
+                self.shortRev
+              else
+                "dev";
+
+            src = self;
+
+            subPackages = [ "." ];
+
+            vendorHash = "sha256-GB5c3ZPhjLw9Kn5mNRBNNNesgJ9m2E92GF+Vgbf4gsY=";
+
+            ldflags = [
+              "-s"
+              "-w"
+              "-X main.version=${
+                if self ? shortRev then
+                  self.shortRev
+                else
+                  "dev"
+              }"
+            ];
+
+            meta = with final.lib; {
+              description = "GitHub CLI extension to generate a daily report (nippou)";
+              homepage = "https://github.com/ryoppippi/gh-nippou";
+              license = licenses.mit;
+              maintainers = [ ];
+            };
+          }
+        ) { };
+      };
+    }
+    // flake-utils.lib.eachDefaultSystem (
       system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
