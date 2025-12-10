@@ -34,7 +34,7 @@
 
             subPackages = [ "." ];
 
-            vendorHash = "sha256-gVGEBce9ZKRE0cm36ybiIGYYdT3r8r6XhbhAg7ruOH0=";
+            vendorHash = "sha256-dvidDJ6NT+naeYCi/I2KykqwcUIPARvKt82ScakQNLQ=";
 
             ldflags = [
               "-s"
@@ -86,7 +86,7 @@
 
           subPackages = [ "." ];
 
-          vendorHash = "sha256-gVGEBce9ZKRE0cm36ybiIGYYdT3r8r6XhbhAg7ruOH0=";
+          vendorHash = "sha256-dvidDJ6NT+naeYCi/I2KykqwcUIPARvKt82ScakQNLQ=";
 
           ldflags = [
             "-s"
