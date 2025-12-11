@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"sort"
 	"strings"
@@ -101,8 +104,17 @@ func run(cmd *cobra.Command, args []string) {
 		log.Fatalf("failed to fetch events: %v", err)
 	}
 
+	// --- Fetch commit contributions ---
+	commitStats, err := fetchCommitContributions(ctx, tc, sinceTime, untilTime)
+	if err != nil {
+		if debug {
+			log.Printf("[Debug] failed to fetch commit contributions: %v", err)
+		}
+		// Continue without commit stats
+	}
+
 	// --- Format output ---
-	output := formatOutput(events)
+	output := formatOutput(events, commitStats)
 	fmt.Print(output)
 }
 
@@ -113,6 +125,12 @@ type Item struct {
 	URL      string
 	User     string
 	Status   string // "", "merged", "closed"
+}
+
+// ContributionStats holds commit contribution statistics
+type ContributionStats struct {
+	TotalCommits      int
+	RestrictedCommits int // commits to private repos
 }
 
 func fetchEvents(ctx context.Context, client *github.Client, user string, sinceTime, untilTime time.Time) ([]Item, error) {
@@ -153,6 +171,11 @@ func fetchEvents(ctx context.Context, client *github.Client, user string, sinceT
 			continue
 		}
 
+		// Skip PushEvent as we get commit counts separately via GraphQL
+		if event.Type != nil && *event.Type == "PushEvent" {
+			continue
+		}
+
 		item, ok := eventToItem(ctx, client, event)
 		if !ok {
 			continue
@@ -171,6 +194,81 @@ func fetchEvents(ctx context.Context, client *github.Client, user string, sinceT
 	}
 
 	return items, nil
+}
+
+// fetchCommitContributions fetches commit counts using GitHub GraphQL API
+func fetchCommitContributions(ctx context.Context, httpClient *http.Client, sinceTime, untilTime time.Time) (ContributionStats, error) {
+	query := `
+query($from: DateTime!, $to: DateTime!) {
+  viewer {
+    contributionsCollection(from: $from, to: $to) {
+      totalCommitContributions
+      restrictedContributionsCount
+    }
+  }
+}`
+
+	variables := map[string]interface{}{
+		"from": sinceTime.Format(time.RFC3339),
+		"to":   untilTime.Format(time.RFC3339),
+	}
+
+	requestBody := map[string]interface{}{
+		"query":     query,
+		"variables": variables,
+	}
+
+	body, err := json.Marshal(requestBody)
+	if err != nil {
+		return ContributionStats{}, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "POST", "https://api.github.com/graphql", bytes.NewReader(body))
+	if err != nil {
+		return ContributionStats{}, err
+	}
+
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return ContributionStats{}, err
+	}
+	defer resp.Body.Close()
+
+	var result struct {
+		Data struct {
+			Viewer struct {
+				ContributionsCollection struct {
+					TotalCommitContributions     int `json:"totalCommitContributions"`
+					RestrictedContributionsCount int `json:"restrictedContributionsCount"`
+				} `json:"contributionsCollection"`
+			} `json:"viewer"`
+		} `json:"data"`
+		Errors []struct {
+			Message string `json:"message"`
+		} `json:"errors"`
+	}
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return ContributionStats{}, err
+	}
+
+	if len(result.Errors) > 0 {
+		return ContributionStats{}, fmt.Errorf("GraphQL error: %s", result.Errors[0].Message)
+	}
+
+	stats := ContributionStats{
+		TotalCommits:      result.Data.Viewer.ContributionsCollection.TotalCommitContributions,
+		RestrictedCommits: result.Data.Viewer.ContributionsCollection.RestrictedContributionsCount,
+	}
+
+	if debug {
+		log.Printf("[Debug] Commit contributions: %d total (%d public, %d private)",
+			stats.TotalCommits+stats.RestrictedCommits,
+			stats.TotalCommits,
+			stats.RestrictedCommits)
+	}
+
+	return stats, nil
 }
 
 func eventToItem(ctx context.Context, client *github.Client, event *github.Event) (Item, bool) {
@@ -329,9 +427,17 @@ func getUser(u *github.User) string {
 	return *u.Login
 }
 
-func formatOutput(items []Item) string {
+func formatOutput(items []Item, stats ContributionStats) string {
+	var sb strings.Builder
+
+	// Show commit summary
+	totalCommits := stats.TotalCommits + stats.RestrictedCommits
+	if totalCommits > 0 {
+		sb.WriteString(fmt.Sprintf("## Commits: %d\n\n", totalCommits))
+	}
+
 	if len(items) == 0 {
-		return ""
+		return sb.String()
 	}
 
 	// Sort by repo name then URL
@@ -342,7 +448,6 @@ func formatOutput(items []Item) string {
 		return items[i].URL < items[j].URL
 	})
 
-	var sb strings.Builder
 	var prevRepo string
 
 	for _, item := range items {
