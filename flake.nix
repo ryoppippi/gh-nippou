@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -15,22 +15,84 @@
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
-      flake-utils,
+      flake-parts,
       treefmt-nix,
       git-hooks,
+      ...
     }:
-    {
-      overlays.default = final: prev: {
-        gh-nippou = final.callPackage (
-          { buildGoModule }:
-          buildGoModule {
-            pname = "gh-nippou";
-            version = if self ? shortRev then self.shortRev else "dev";
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
 
-            src = self;
+      flake = {
+        overlays.default = final: prev: {
+          gh-nippou = final.callPackage (
+            { buildGoModule }:
+            buildGoModule {
+              pname = "gh-nippou";
+              version = if self ? shortRev then self.shortRev else "dev";
+
+              src = self;
+
+              subPackages = [ "." ];
+
+              vendorHash = "sha256-D6jTbWO7CYn7VxZV7Zz4TXjyS7xYhAgnEuSHic5PYr4=";
+
+              ldflags = [
+                "-s"
+                "-w"
+                "-X main.version=${if self ? shortRev then self.shortRev else "dev"}"
+              ];
+
+              meta = with final.lib; {
+                description = "GitHub CLI extension to generate a daily report (nippou)";
+                homepage = "https://github.com/ryoppippi/gh-nippou";
+                license = licenses.mit;
+                maintainers = [ ];
+              };
+            }
+          ) { };
+        };
+      };
+
+      perSystem =
+        { pkgs, system, ... }:
+        let
+          # Extract version from git tag or use commit hash
+          version = if self ? shortRev then self.shortRev else "dev";
+
+          treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
+
+          pre-commit-check = git-hooks.lib.${system}.run {
+            src = ./.;
+            hooks = {
+              treefmt = {
+                enable = true;
+                package = treefmtEval.config.build.wrapper;
+              };
+            };
+          };
+        in
+        {
+          formatter = treefmtEval.config.build.wrapper;
+
+          checks = {
+            formatting = treefmtEval.config.build.check self;
+            inherit pre-commit-check;
+          };
+
+          packages.default = pkgs.buildGoModule {
+            pname = "gh-nippou";
+            inherit version;
+
+            src = ./.;
 
             subPackages = [ "." ];
 
@@ -39,79 +101,27 @@
             ldflags = [
               "-s"
               "-w"
-              "-X main.version=${if self ? shortRev then self.shortRev else "dev"}"
+              "-X main.version=${version}"
             ];
 
-            meta = with final.lib; {
+            meta = with pkgs.lib; {
               description = "GitHub CLI extension to generate a daily report (nippou)";
               homepage = "https://github.com/ryoppippi/gh-nippou";
               license = licenses.mit;
               maintainers = [ ];
             };
-          }
-        ) { };
-      };
-    }
-    // flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-        # Extract version from git tag or use commit hash
-        version = if self ? shortRev then self.shortRev else "dev";
+          };
 
-        treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
-
-        pre-commit-check = git-hooks.lib.${system}.run {
-          src = ./.;
-          hooks = {
-            treefmt = {
-              enable = true;
-              package = treefmtEval.config.build.wrapper;
-            };
+          devShells.default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              go
+              gopls
+              gotools
+              go-tools
+              just
+            ];
+            inherit (pre-commit-check) shellHook;
           };
         };
-      in
-      {
-        formatter = treefmtEval.config.build.wrapper;
-
-        checks = {
-          formatting = treefmtEval.config.build.check self;
-          inherit pre-commit-check;
-        };
-        packages.default = pkgs.buildGoModule {
-          pname = "gh-nippou";
-          inherit version;
-
-          src = ./.;
-
-          subPackages = [ "." ];
-
-          vendorHash = "sha256-D6jTbWO7CYn7VxZV7Zz4TXjyS7xYhAgnEuSHic5PYr4=";
-
-          ldflags = [
-            "-s"
-            "-w"
-            "-X main.version=${version}"
-          ];
-
-          meta = with pkgs.lib; {
-            description = "GitHub CLI extension to generate a daily report (nippou)";
-            homepage = "https://github.com/ryoppippi/gh-nippou";
-            license = licenses.mit;
-            maintainers = [ ];
-          };
-        };
-
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            go
-            gopls
-            gotools
-            go-tools
-            just
-          ];
-          inherit (pre-commit-check) shellHook;
-        };
-      }
-    );
+    };
 }
