@@ -4,6 +4,7 @@ go 1.25.3
 
 require (
 	github.com/cli/go-gh v1.2.1
+	github.com/cli/go-gh/v2 v2.13.0
 	github.com/google/go-github/v69 v69.2.0
 	github.com/google/go-github/v81 v81.0.0
 	github.com/google/go-github/v81 v81.0.0
