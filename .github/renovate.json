@@ -20,5 +20,26 @@
   "dependencyDashboard": false,
   "automerge": true,
   "branchConcurrentLimit": 0,
-  "stabilityDays": 3
+  "stabilityDays": 3,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^go\\.mod$"],
+      "matchStrings": ["go (?<currentValue>\\d+\\.\\d+(\\.\\d+)?)"],
+      "depNameTemplate": "go",
+      "datasourceTemplate": "golang-version"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["gomod"],
+      "postUpgradeTasks": {
+        "commands": [
+          "nix run nixpkgs#nix-update -- --flake --version=skip default"
+        ],
+        "fileFilters": ["flake.nix"],
+        "executionMode": "branch"
+      }
+    }
+  ]
 }
