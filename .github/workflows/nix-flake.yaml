@@ -28,3 +28,6 @@ jobs:
 
       - name: Check flake
         run: nix flake check --all-systems --show-trace
+
+      - name: Build package (verify vendorHash)
+        run: nix build
