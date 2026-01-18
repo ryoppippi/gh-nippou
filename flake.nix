@@ -55,7 +55,7 @@
                 description = "GitHub CLI extension to generate a daily report (nippou)";
                 homepage = "https://github.com/ryoppippi/gh-nippou";
                 license = licenses.mit;
-                maintainers = [ ];
+                maintainers = with maintainers; [ ryoppippi ];
               };
             }
           ) { };
@@ -108,7 +108,7 @@
               description = "GitHub CLI extension to generate a daily report (nippou)";
               homepage = "https://github.com/ryoppippi/gh-nippou";
               license = licenses.mit;
-              maintainers = [ ];
+              maintainers = with maintainers; [ ryoppippi ];
             };
           };
 
