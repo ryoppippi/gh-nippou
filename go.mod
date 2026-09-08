@@ -1,14 +1,13 @@
 module github.com/ryoppippi/gh-nippou
 
-go 1.25.3
+go 1.26.0
 
 require (
 	github.com/cli/go-gh v1.2.1
 	github.com/google/go-github/v69 v69.2.0
 	github.com/google/go-github/v81 v81.0.0
-	github.com/google/go-github/v81 v81.0.0
 	github.com/spf13/cobra v1.10.2
-	golang.org/x/oauth2 v0.34.0
+	golang.org/x/oauth2 v0.37.0
 )
 
 require (
