@@ -42,7 +42,7 @@
 
               subPackages = [ "." ];
 
-              vendorHash = "sha256-m4o0d75NyoAZwnqCOtGqHpNUFgr58JW+fPBqjZMT1m0=";
+              vendorHash = "sha256-c11QW4EzyCw+MP9bl7U4dE9M4hX0hot0bHruuOPV6VQ=";
 
               ldflags = [
                 "-s"
