@@ -21,6 +21,9 @@
   "automerge": true,
   "branchConcurrentLimit": 0,
   "stabilityDays": 3,
+  "gitIgnoredAuthors": [
+    "114827586+autofix-ci[bot]@users.noreply.github.com"
+  ],
   "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"],
   "packageRules": [
     {
