@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/cli/go-gh"
-	"github.com/google/go-github/v69/github"
+	"github.com/google/go-github/v93/github"
 	"github.com/spf13/cobra"
 	"golang.org/x/oauth2"
 )
