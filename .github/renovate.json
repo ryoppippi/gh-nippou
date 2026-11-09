@@ -21,13 +21,5 @@
   "automerge": true,
   "branchConcurrentLimit": 0,
   "stabilityDays": 3,
-  "customManagers": [
-    {
-      "customType": "regex",
-      "fileMatch": ["^go\\.mod$"],
-      "matchStrings": ["go (?<currentValue>\\d+\\.\\d+(\\.\\d+)?)"],
-      "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version"
-    }
-  ]
+  "postUpdateOptions": ["gomodTidy", "gomodUpdateImportPaths"]
 }
