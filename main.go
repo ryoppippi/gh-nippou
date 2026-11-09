@@ -96,7 +96,10 @@ func run(cmd *cobra.Command, args []string) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: ghToken})
 	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
+	client, err := github.NewClient(github.WithHTTPClient(tc))
+	if err != nil {
+		log.Fatalf("failed to create GitHub client: %v", err)
+	}
 
 	// --- Fetch events ---
 	events, err := fetchEvents(ctx, client, user, sinceTime, untilTime)
