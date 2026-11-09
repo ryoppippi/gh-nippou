@@ -65,9 +65,6 @@
       perSystem =
         { pkgs, system, ... }:
         let
-          # Extract version from git tag or use commit hash
-          version = if self ? shortRev then self.shortRev else "dev";
-
           treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
 
           pre-commit-check = git-hooks.lib.${system}.run {
@@ -88,28 +85,19 @@
             inherit pre-commit-check;
           };
 
-          packages.default = pkgs.buildGoModule {
-            pname = "gh-nippou";
-            inherit version;
+          packages.default = (pkgs.extend self.overlays.default).gh-nippou;
 
-            src = ./.;
-
-            subPackages = [ "." ];
-
-            vendorHash = "sha256-8eKVjAoeCxZqFZvDcgR2NHhJkNiRKMOQt/6g1Nm+2q4=";
-
-            ldflags = [
-              "-s"
-              "-w"
-              "-X main.version=${version}"
-            ];
-
-            meta = with pkgs.lib; {
-              description = "GitHub CLI extension to generate a daily report (nippou)";
-              homepage = "https://github.com/ryoppippi/gh-nippou";
-              license = licenses.mit;
-              maintainers = with maintainers; [ ryoppippi ];
-            };
+          apps.update-vendor-hash = {
+            type = "app";
+            program = pkgs.lib.getExe (
+              pkgs.writeShellApplication {
+                name = "update-vendor-hash";
+                runtimeInputs = [ pkgs.nix-update ];
+                text = ''
+                  nix-update --flake --version=skip default
+                '';
+              }
+            );
           };
 
           devShells.default = pkgs.mkShell {
